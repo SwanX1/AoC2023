@@ -9,7 +9,10 @@ async function runDay(day: number): Promise<void> {
   try {
     await import(`./day${day}.ts`);
   } catch (err) {
-    throw new Error(`Day ${day} not found`);
+    if ((err as { position: unknown }).position === null) {
+      throw new Error(`Day ${day} not found`, { cause: err });
+    }
+    throw err;
   }
 }
 
